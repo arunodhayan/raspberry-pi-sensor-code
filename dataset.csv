@@ -1,0 +1,133 @@
+Type,Code,Cause,Recovery mode
+1,1,Controller run mode,powerloss handler
+1,16,I/O configuration fault,reconfigure the communication modules
+1,40,battery fault if controller uses the battery,battery replacement
+1,60,"no memory card installed ,non recoverable fault of data","clear the fault, Download the project "
+1,61,controller with memory fault,"clear the fault, Download the project "
+1,62,secured digital fault,"clear the fault, Download the project "
+3,16,I/O module failure,"I/O module is in the chasis(major fault),electronic keying "
+3,20/21,possible fault in chasis ,non recoverable
+3,23,In run mode one connection is not established ,wait for controllor to turn green before changing it in to run mode
+4,21,controller structure .len or .pos <0,adjust the value if it is >0
+4,42,Jmp to label that did not exixt or was deleted,correct the jump target
+4,82,A sequential function chart(SFC) called subroutine ,Remove the jump call back to SFC
+4,84,Stack overflow,reduce the subroutine
+4,89,"In an SFR instruction, the target routine does not contain the target step.",Correct the SFR target or add the missing step.
+4,90,A safety instruction occurs outside a safety task.,Place the safety instruction inside the safety task.
+4,91,Equipment Phase instruction is being called from outside an Equipment Phase program.,Only use the instruction in an Equipment Phase program.
+4,94,Nesting limits exceeded.,Restructure the project to reduce the subroutine nesting levels.
+4,990,User-defined major faults.,
+4,991,,
+4,992,,
+4,993,,
+4,994,,
+4,995,,
+4,996,,
+4,997,,
+4,998,,
+4,999,,
+6,1,"Task watchdog expired.
+User task has not completed in the specified period. A program error caused an infinite loop, or the program is too complex to run as quickly as specified, or a higher priority task is keeping this task from finishing.","Take one or more of these steps:
+  Increase the task watchdog.
+  Shorten the execution time.
+  Make the priority of this task higher.
+  Simplify higher priority tasks.
+  Move some code to another controller."
+7,40,Store to nonvolatile memory failed.,"1. Try again to store the project to nonvolatile memory.
+2. If the project fails to store to nonvolatile memory, replace the memory card.
+If you are using a 1756-L7x controller, verify that the SD card is unlocked."
+7,41,Load from nonvolatile memory failed due to controller type mismatch.,Change to a controller of the correct type or download the project and store it on the memory card.
+7,42,Load from nonvolatile memory failed because the firmware revision of the project in nonvolatile memory does not match the firmware revision of the controller.,Update the controller firmware to the same revision level as the project that is in nonvolatile memory.
+7,43,Load from nonvolatile memory failed due to bad checksum.,Contact Rockwell Automation support.
+7,44,Failed to restore processor memory.,Contact Rockwell Automation support.
+7,50,"The log file certificate cannot be verified. When the controller starts up it attempts to verify the log file key/certificate combination. Depending on the verification, the controller takes one of the following actions:
+  If the controller verifies the existing log file certificate, the controller continues with existing log directory.
+  If the existing certificate cannot be verified, the controller logs a major fault and attempts to create a new certificate.
+      If the controller successfully creates a new certificate, it creates a backup log subdirectory, moves the existing files to that directory, and continues logging and signing with the new verification key and log file certificate.
+      If the controller cannot create a new certificate, the controller writes log entries to the existing log directory, but does not update signature files in that directory.","Clear the fault and power cycle the controller. If the problem persists, contact Rockwell Automation support."
+8,1,Attempted to place controller in Run mode with keyswitch during download.,Wait for the download to complete and clear the fault.
+11,1,Actual position has exceeded positive overtravel limit.,Move axis in negative direction until position is within overtravel limit and then execute Motion Axis Fault Reset.
+11,2,Actual position has exceeded negative overtravel limit.,Move axis in positive direction until position is within overtravel limit and then run Motion Axis Fault Reset.
+11,3,Actual position has exceeded position error tolerance.,"Move the position within tolerance, then run Motion Axis Fault Reset."
+11,4,"Encoder channel A, B, or Z connection is broken.","Reconnect the encoder channel, then run Motion Axis Fault Reset."
+11,5,Encoder noise event detected or the encoder signals are not in quadrature.,"Fix encoder cabling, then run Motion Axis Fault Reset."
+11,6,Drive Fault input was activated.,Clear Drive Fault then run Motion Axis Fault Reset.
+11,7,Synchronous connection incurred a failure.,"Try these steps:
+  First, run Motion Axis Fault Reset.
+  If that does not work, pull the servo module out and plug it back in.
+  If this does not work, replace the servo module."
+11,8,Servo module has detected a serious hardware fault.,Replace the module.
+11,9,Asynchronous Connection has incurred a failure.,"Try these steps:
+  First, run Motion Axis Fault Reset.
+  If that does not work, pull the servo module out and plug it back in.
+  If this does not work, replace the servo module."
+11,10,Motor fault has occurred.,See the DriveFaults axis tag for more information.
+11,11,Motor thermal fault has occurred.,See the DriveFaults axis tag for more information.
+11,12,Drive thermal fault has occurred.,See the DriveFaults axis tag for more information.
+11,13,SERCOS ring fault has occurred.,Verify the integrity of the SERCOS fiber-optic ring network and the devices on it.
+11,14,Drive enable input fault has occurred.,Re-enable the drive enable input and clear the fault.
+11,15,Drive phase loss fault has occurred.,Restore full power connection to the drive and clear the fault.
+11,16,Drive guard fault has occurred.,See the GuardFaults axis tag for more information.
+11,32,The motion task has experienced an overlap.,"The group’s course update rate is too high to maintain correct operation. Clear the group fault tag, raise the group’s update rate, and then clear the major fault."
+11,33,Coordinated System Time reference has been lost.,
+12,32,A disqualified secondary controller cycled power and no partner chassis or controller was found upon powerup.,"Verify the following items.
+  A partner chassis is connected.
+  Power is applied to both redundant chassis.
+  Partner controllers have the same:
+      Catalog number
+      Slot number
+      Firmware revision"
+12,33,An unpartnered controller has been identified in the new primary chassis after a switchover.,"Either:
+  Remove the unpartnered controller and troubleshoot the cause of the switch over.
+  Add a partner controller to the secondary chassis, troubleshoot the cause of the switch over, and synchronize the system."
+12,34,"Just after a switchover occurs, the keyswitch positions of the primary and secondary controllers are mismatched.
+The old primary controller is in Program mode and the new primary controller is in Run mode.","Either:
+  Change the keyswitches from Run to Program to Run mode twice to clear the fault.
+  Use the Logix Designer application to go online with the controllers. Then, clear the faults and change both the controller's mode to Run."
+14,1,"Safety Task watchdog expired.
+User task has not completed in a specified period. A program error caused an infinite loop, the program is too complex to run as quickly as specified, a higher priority task is keeping this task from finishing, or the safety partner has been removed.","Clear the fault.
+If a safety task signature exists, safety memory is re- initialized and the safety task begins executing.
+If a safety task signature does not exist, you must re- download the program to allow the safety task to run.
+Reinsert the safety partner, if it was removed."
+14,2,An error exists in a routine of the safety task.,Correct the error in the user-program logic.
+14,3,Safety partner is missing.,Install a compatible safety partner.
+14,4,Safety partner is unavailable.,Install a compatible safety partner.
+14,5,Safety partner hardware is incompatible.,Install a compatible safety partner.
+14,6,Safety partner firmware is incompatible.,Update the safety partner so that the firmware major and minor revision matches the primary controller.
+14,7,"Safety task is inoperable.
+This fault occurs when the safety logic is invalid. For example, a mismatch in logix exists between the primary controller and safety partner, a watchdog timeout occurred, or memory is corrupt.","Clear the fault.
+If a safety task signature exists, safety memory is re- initialized via the safety task signature and the safety task begins executing.
+If a safety task signature does not exist, you must download the program again to allow the safety task to run."
+14,8,Coordinated system time (CST) not found.,Clear the fault. Configure a device to be the CST master.
+14,9,Safety partner nonrecoverable controller fault.,"Clear the fault and download the program. If the fault persists, replace the safety partner."
+17,34,Controller internal temperature has exceeded operating limit.,Measures should be taken to reduce the ambient temperature of the module. Follow the recommended limits for the ambient (inlet) temperature and apply the required clearance around the chassis.
+18,1,The CIP Motion drive has not initialized correctly.,"To determine corrective action, see the CIP Initialization attribute for details about the type of fault that occurred.
+For more information about the CIP Initialization attribute, see the Integrated Motion on the Ethernet/IP Network  Configuration and Startup User Manual, publication MOTION-UM003 ."
+18,2,"The CIP Motion drive has not initialized correctly.
+This fault is indicated when a
+manufacturer-specific initialization fault has occurred.","To determine the corrective action, see the CIP Initialization Fault - Mfg attributes for details about the fault that occurred.
+For more information about the CIP Initialization Fault - Mfg attribute, see the Integrated Motion on the Ethernet/IP Network Configuration and Startup User Manual, publication MOTION-UM003 ."
+18,3,"The Physical Axis Fault bit is set, indicating a fault on the physical axis.","To determine corrective action, see the CIP Axis Fault attributes for details about the fault that occurred.
+For more information about the CIP Axis Fault attributes, see the Integrated Motion on the Ethernet/IP Network  Configuration and Startup User Manual, publication MOTION-UM003 ."
+18,4,"The Physical Axis Fault bit is set, indicating a fault on the physical axis.
+This fault is indicated when a manufacturer-specific axis fault has occurred.","To determine corrective action, see the CIP Axis Fault - Mfg attributes for details about the fault that occurred.
+For more information about the CIP Axis Fault -Mfg attributes, see the Integrated Motion on the Ethernet/IP Network Configuration and Startup User Manual, publication MOTION-UM003 ."
+18,5,A motion fault occurred.,"To determine corrective action, see the Motion Fault attribute and Motion Fault bits for details about the fault that occurred.
+For more information about the Motion Fault attribute and Motion Fault bits, see the Integrated Motion on the Ethernet/IP Network Configuration and Startup User Manual, publication MOTION-UM003."
+18,6,"A CIP Motion Drive fault has occurred.
+Usually the fault affects all the axes associated with the module and all of the associated axes are shut down.","Reconfigure the faulted motion module to correct the fault.
+For more information about the Module Fault attribute and Module Fault bits, see the Integrated Motion on the Ethernet/IP Network Configuration and Startup User Manual, publication MOTION-UM003."
+18,7,"A motion group fault has occurred.
+Usually the fault affects all of the axes associated with a motion group.","Reconfigure the entire motion subsystem to correct the fault.
+See the Group Fault attribute if details about the fault are needed."
+18,8,"A fault has occurred during the configuration of a CIP Motion Drive.
+Typically, this fault occurs after an attempt to update an axis configuration attribute of a CIP Motion Drive was unsuccessful.","To determine the corrective action, see the Configuration Fault in the Attribute Error Code and Attribute Error ID attributes associated with the motion or 1756-ENxT module."
+18,9,An Absolute Position Recovery (APR) fault has occurred and the absolute position of the axis cannot be recovered.,"To determine the corrective action, see the APR Fault attributes to determine the cause of the fault.
+For more information about the APR Fault attributes, see the Integrated Motion on the Ethernet/IP Network Configuration and Startup User Manual, publication MOTION-UM003."
+18,10,"An Absolute Position Recovery (APR) fault has occurred and the absolute position of the axis cannot be recovered.
+This fault is indicated when a manufacturer-specific APR fault has occurred.","To determine the corrective action, see the APR Fault - Mfg attributes to determine the cause of the fault.
+For more information about the APR Fault - Mfg attributes, see the Integrated Motion on the Ethernet/IP Network  Configuration and Startup User Manual, publication MOTION-UM003."
+18,128,"A fault specific to the Guard Motion safety function has occurred.
+This fault is applicable only when a drive with Guard Safety functionality is used.","To determine the corrective action, see the Guard Motion attributes and Guard Status bits to determine the cause of the fault.
+For more information about the Guard Motion attributes and Guard Status bits, see the Integrated Motion on the Ethernet/IP Network Configuration and Startup User Manual, publication MOTION-UM003."
+20,1,A required license is missing or expired during the transition to run or test mode.,Insert a CmCard containing all licenses required by the project in the controller.
